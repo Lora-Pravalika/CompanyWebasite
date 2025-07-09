@@ -1,0 +1,81 @@
+.company-Page {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Roboto', sans-serif;
+  background: white;
+  margin-left: 1px;
+  padding-top: 140px;
+  padding: 100px;
+  width: 1500px;
+}
+
+.company-box {
+  background-color: white;
+  padding: 40px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  margin-left: -350px;
+  margin-top: -150px;
+}
+
+.input-container {
+  position: relative;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.input-container input {
+  width: 100%;
+  padding: 10px 10px 10px 35px; /* left padding for icon */
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-style: italic;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: gray;
+}
+
+.company-box label {
+  font-size: 18px;
+  color: #444;
+}
+
+.company-box button {
+  background-color: #4caf50;
+  color: white;
+  margin-top: 25px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.company-box button:hover {
+  background-color: #45a049;
+}
+
+.verified {
+  color: green;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.not-verified {
+  color: red;
+  margin-top: 20px;
+  font-weight: bold;
+}
