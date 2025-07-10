@@ -1,30 +1,25 @@
 .login_page {
-  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Roboto', sans-serif;
-  background: #f1f1f1;
-  margin-left: 2px;
-  width: 1650px;
-  padding: 200px;
-  padding-left: 100px;
+  min-height: 100vh;
+  padding: 20px;
+  background: white;
 }
 
 .login_box {
-  background-color: white;
-  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  padding: 30px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
-  max-width: 400px;
-  width: 100%;
-  margin-top: -350px;
-  margin-left: -450px;
+  background-color: white;
 }
 
 .login_box h2 {
   text-align: center;
   margin-bottom: 20px;
+  margin-left: 30px;
 }
 
 .login_box label {
@@ -40,17 +35,20 @@
   border-radius: 6px;
   margin-top: 5px;
   border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
 .login_box button {
   background-color: #2196f3;
   color: white;
-  width: 100%;
+  width: 40%;
   padding: 12px;
-  margin-top: 25px;
+  margin-top: 25px ;
+  margin-left: 90px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  box-shadow: 1px 2px 2px black;
   transition: background-color 0.3s;
 }
 
@@ -63,8 +61,20 @@
   margin-top: 15px;
   text-align: center;
 }
+
 .login-fail {
   color: red;
   margin-top: 15px;
   text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+  .login_box {
+    padding: 20px;
+  }
+
+  .login_box input,
+  .login_box button {
+    font-size: 16px;
+  }
 }

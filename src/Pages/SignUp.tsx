@@ -53,7 +53,7 @@ const SignUp: React.FC = () => {
       <div className="company-box">
         <label>Enter Your Company</label><br />
         <div className="input-container">
-          <span className="search-icon"><Search size={18} color="white" /></span>
+          <span className="search-icon"><Search size={18} color="black" /></span>
           <input
             type="text"
             placeholder="Enter company name..."

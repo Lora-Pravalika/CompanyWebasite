@@ -49,12 +49,14 @@ const LoginPage: React.FC = () => {
         <input
           type="text"
           value={employeeId}
+          required
           onChange={(e) => setEmployeeId(e.target.value)}
         /><br />
         <label className="pass">Password</label>
         <input
           type="password"
           value={password}
+          required
           onChange={(e) => setPassword(e.target.value)}
         /><br />
         <button onClick={handleLogin}>Login</button>
