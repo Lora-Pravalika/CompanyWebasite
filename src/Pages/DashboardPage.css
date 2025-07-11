@@ -8,8 +8,6 @@
 /* Sidebar */
 .sidebar {
   width: 220px;
-  
-  
   transition: width 0.3s ease;
   padding-top: 20px;
   flex-shrink: 0;
@@ -33,12 +31,10 @@
   cursor: pointer;
   transition: transform 0.3s ease;
   color: #000;
-
 }
 .sidebar-toggle:hover {
   background-color: #707b8a;
 }
-
 
 .sidebar ul {
   list-style: none;
@@ -54,12 +50,10 @@
   white-space: nowrap;
   margin-top: 10px;
   text-shadow: 1px 2px white;
-  
 }
 .sidebar-nav {
   position: relative;
 }
-
 .sidebar-nav ul {
   position: relative;
   z-index: 2;
@@ -70,19 +64,17 @@
   height: 48px;
   width: 100%;
   background: rgba(255, 255, 255, 0.05);
-
   transition: top 0.2s ease;
   z-index: 1;
   pointer-events: none;
   border-radius: 0 4px 4px 0;
 }
 .sidebar li.active {
-    background-color: #b1b4bb;
+  background-color: #b1b4bb;
 }
 .sidebar li:hover {
-    background-color: #b5c7df;
-    box-shadow: 1px 2px 1px black; /* hover */
-
+  background-color: #b5c7df;
+  box-shadow: 1px 2px 1px black;
 }
 
 /* Main content */
@@ -100,17 +92,17 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px 25px;
-
-   background-color: #ffffff;
+  background-color: #ffffff;
   border-bottom: 1px solid #e2e8f0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
-h2{
+h2 {
   margin-left: 450px;
   align-items: center;
   color: #055c72;
 }
 
+/* Profile Menu */
 .profile-menu {
   position: relative;
 }
@@ -124,30 +116,28 @@ h2{
   top: 35px;
   background: white;
   border: 1px solid #ddd;
-  padding: 10px;
+  padding: 8px;
   display: flex;
   z-index: 10;
   flex-direction: column;
-  
-  padding: 10px;
+  min-width: 160px;
 }
 .dropdown hr {
   border-top: 1px solid #f0f3f7;
 }
-
-.profile-menu:hover .dropdown {
-  display: block;
-}
 .dropdown button {
   background: none;
   border: none;
-    color: #1e293b;
+  color: #1e293b;
   font-size: 14px;
+  padding: 8px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 .dropdown button:hover {
   background-color: #e8ecf0;
-  
 }
 
 /* Content section */
@@ -155,7 +145,7 @@ h2{
   flex: 1;
   padding: 20px;
   overflow-y: auto;
-    background-color: #f8fafc;
+  background-color: #f8fafc;
 }
 
 /* Responsive */
@@ -167,12 +157,123 @@ h2{
     left: 0;
     top: 0;
   }
-
   .main-content {
     margin-left: 220px;
   }
-
   .sidebar.collapsed + .main-content {
     margin-left: 70px;
   }
+}
+
+/* ======================= */
+/* 🌟 Profile Modal Styles */
+/* ======================= */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  animation: growFade 0.3s ease-in-out;
+  position: relative;
+}
+
+@keyframes growFade {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.close-icon {
+  font-size: 16px;
+  color: #555;
+  cursor: pointer;
+  text-align: right;
+  margin-left: auto;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.profile-image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.profile-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #cbd5e1;
+}
+.camera-icon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f1f5f9;
+  border-radius: 6px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.camera-icon:hover {
+  background: #e2e8f0;
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+.modal-actions button {
+  padding: 10px;
+  border: none;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+.edit-btn {
+  background-color: #3b82f6;
+  color: white;
+}
+.delete-btn {
+  background-color: #ef4444;
+  color: white;
+}
+.remove-btn {
+  margin-top: 12px;
+  font-size: 13px;
+  background: #f3f4f6;
+  color: #1e293b;
+  border-radius: 4px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
 }
