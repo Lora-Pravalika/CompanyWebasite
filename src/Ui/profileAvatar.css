@@ -1,0 +1,147 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 320px;
+  animation: growFade 0.3s ease-in-out;
+  position: relative;
+}
+
+@keyframes growFade {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.close-icon {
+  font-size: 16px;
+  color: #555;
+  cursor: pointer;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.profile-image-wrapper {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+}
+
+.profile-preview,
+.placeholder-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #cbd5e1;
+}
+
+.placeholder-circle {
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #6b7280;
+  border: 2px dashed #cbd5e1;
+}
+
+/* ✅ Camera icon inside profile circle */
+.camera-icon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: white;
+  border-radius: 50%;
+  padding: 6px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  font-size: 14px;
+  color: #3b82f6;
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.modal-actions button {
+  padding: 10px;
+  border: none;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.edit-btn {
+  background-color: #3b82f6;
+  color: white;
+}
+.remove-btn {
+  background-color: #f3f4f6;
+  color: #1e293b;
+}
+
+/* Cropper area */
+.cropper-wrapper {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  background: #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+/* ✅ Cancel / Done buttons */
+.crop-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.cancel-btn,
+.save-btn {
+  flex: 1;
+  padding: 10px;
+  margin: 0 5px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+}
+
+.cancel-btn {
+  background-color: #f87171;
+  color: white;
+}
+.save-btn {
+  background-color: #22c55e;
+  color: white;
+}
