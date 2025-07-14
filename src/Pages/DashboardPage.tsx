@@ -2,7 +2,8 @@
 import React, { useRef, useState } from 'react';
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import {
-  FaAngleDoubleLeft, FaUserCircle, FaSignOutAlt, FaCog, FaUser
+  FaAngleDoubleLeft, FaUserCircle, FaSignOutAlt, FaCog,
+  FaTachometerAlt, FaUsers, FaBriefcase, FaMoneyBillWave, FaUser
 } from 'react-icons/fa';
 import Dashboard from '../layouts/Dashboard';
 import Employees from '../layouts/Exployees';
@@ -12,10 +13,10 @@ import ProfileModal from '../Ui/profileAvatar';
 import './DashboardPage.css';
 
 const sidebarItems = [
-  { name: 'Dashboard', path: '', icon: <FaUser /> },
-  { name: 'Employees', path: 'employees', icon: <FaUser /> },
-  { name: 'HR Services', path: 'hr', icon: <FaUser /> },
-  { name: 'Payroll', path: 'payroll', icon: <FaUser /> }
+  { name: 'Dashboard', path: '', icon: <FaTachometerAlt /> },
+  { name: 'Employees', path: 'employees', icon: <FaUsers /> },
+  { name: 'HR Services', path: 'hr', icon: <FaBriefcase /> },
+  { name: 'Payroll', path: 'payroll', icon: <FaMoneyBillWave /> }
 ];
 
 const DashboardPage = () => {
@@ -69,7 +70,7 @@ const DashboardPage = () => {
                 <hr />
                 <button><FaCog /> Settings</button>
                 <hr />
-                <button onClick={handleLogout} style={{color:'red'}}><FaSignOutAlt /> Logout</button>
+                <button onClick={handleLogout} style={{ color: 'red' }}><FaSignOutAlt /> Logout</button>
               </div>
             )}
           </div>

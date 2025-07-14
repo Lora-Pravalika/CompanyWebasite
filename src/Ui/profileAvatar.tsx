@@ -1,3 +1,4 @@
+// src/Ui/profileAvatar.tsx
 import React, { useRef, useState } from 'react';
 import { FaTimesCircle, FaCamera, FaTrash } from 'react-icons/fa';
 import Cropper from 'react-easy-crop';
@@ -10,7 +11,7 @@ interface Props {
   currentImage: string | null;
 }
 
-const API_BASE = 'http://localhost:8000'; // your backend URL
+const API_BASE = 'https://aihr4u.onrender.com'; // your backend
 
 const ProfileModal: React.FC<Props> = ({ onClose, onSaveImage, currentImage }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -50,12 +51,9 @@ const ProfileModal: React.FC<Props> = ({ onClose, onSaveImage, currentImage }) =
 
     try {
       const croppedBase64 = await getCroppedImg(imageSrc, croppedAreaPixels);
-
-      // Convert base64 to blob
       const blob = await (await fetch(croppedBase64)).blob();
       const file = new File([blob], 'avatar.jpg', { type: 'image/jpeg' });
 
-      // Send to backend
       const formData = new FormData();
       formData.append('file', file);
 
@@ -65,8 +63,14 @@ const ProfileModal: React.FC<Props> = ({ onClose, onSaveImage, currentImage }) =
       });
 
       const result = await response.json();
-      const imageUrl = `${API_BASE}/uploads/${result.filename}`;
+      console.log("✅ Uploaded image result:", result);
 
+      if (!result.filename) {
+        alert("Upload failed");
+        return;
+      }
+
+      const imageUrl = `${API_BASE}/uploads/${result.filename}`;
       setPreview(imageUrl);
       setUploadedFilename(result.filename);
       onSaveImage(imageUrl);
