@@ -1,45 +1,49 @@
-import React, { useState, useEffect } from "react";
-import './LoginPage.css';
+import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import './LoginPage.css';
 
 const LoginPage: React.FC = () => {
   const [employeeId, setEmployeeId] = useState("");
   const [password, setPassword] = useState("");
-  const [submitted, setSubmitted] = useState(false);
   const [loginStatus, setLoginStatus] = useState<"success" | "error" | null>(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    if (employeeId.trim() && password.trim()) {
-      setSubmitted(true);
+  const handleLogin = async () => {
+    if (!employeeId.trim() || !password.trim()) return;
+
+    setLoading(true);
+    try {
+      const res = await fetch("https://aihr4u.onrender.com/api/login/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          employee_id: employeeId.trim(),
+          password: password.trim()
+        }),
+      });
+
+      const data = await res.json();
+      console.log("Login response:", data);
+
+      if (res.ok && data.access_token) {
+        localStorage.setItem("authToken", data.access_token);
+        localStorage.setItem("refreshToken", data.refresh_token || "");
+        localStorage.setItem("employee_id", data.employee_id);
+        localStorage.setItem("name", data.name);
+
+        setLoginStatus("success");
+        setTimeout(() => navigate("/dashboard"), 1000);
+      } else {
+        setLoginStatus("error");
+      }
+    } catch (err) {
+      console.error("Login failed:", err);
+      setLoginStatus("error");
+    } finally {
+      setLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (!submitted) return;
-
-    fetch("https://aihr4u.onrender.com/api/login/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        employee_id: employeeId.trim(),
-        password: password.trim()
-      }),
-    })
-      .then(async (res) => {
-        const data = await res.json();
-        console.log("Login Response:", data);
-
-        if (res.ok && data.message?.toLowerCase().includes("successful")) {
-          setLoginStatus("success");
-          setTimeout(() => navigate("/dashboard"), 1500); // ✅ Redirect
-        } else {
-          setLoginStatus("error");
-        }
-      })
-      .catch(() => setLoginStatus("error"))
-      .finally(() => setSubmitted(false));
-  }, [submitted, employeeId, password, navigate]);
 
   return (
     <div className="login_page">
@@ -49,17 +53,19 @@ const LoginPage: React.FC = () => {
         <input
           type="text"
           value={employeeId}
-          required
           onChange={(e) => setEmployeeId(e.target.value)}
-        /><br />
+          required
+        />
         <label className="pass">Password</label>
         <input
           type="password"
           value={password}
-          required
           onChange={(e) => setPassword(e.target.value)}
-        /><br />
-        <button onClick={handleLogin}>Login</button>
+          required
+        />
+        <button onClick={handleLogin} disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
 
         {loginStatus === "success" && <p className="login-success">✅ Login successful! Redirecting...</p>}
         {loginStatus === "error" && <p className="login-fail">❌ Invalid credentials</p>}

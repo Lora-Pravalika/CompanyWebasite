@@ -1,5 +1,5 @@
 // src/Ui/profileAvatar.tsx
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { FaTimesCircle, FaCamera, FaTrash } from 'react-icons/fa';
 import Cropper from 'react-easy-crop';
 import getCroppedImg from './CropImage';
@@ -11,17 +11,24 @@ interface Props {
   currentImage: string | null;
 }
 
-const API_BASE = 'https://aihr4u.onrender.com'; // your backend
+const API_BASE = 'https://aihr4u.onrender.com/api';
 
-const ProfileModal: React.FC<Props> = ({ onClose, onSaveImage, currentImage }) => {
+const ProfileModal: React.FC<Props> = ({ onClose, onSaveImage }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const [preview, setPreview] = useState<string | null>(currentImage);
+  const [preview, setPreview] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [cropping, setCropping] = useState(false);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
   const [uploadedFilename, setUploadedFilename] = useState<string | null>(null);
+
+  useEffect(() => {
+    const savedUrl = localStorage.getItem('profileImageUrl');
+    const savedFilename = localStorage.getItem('profileFilename');
+    if (savedUrl) setPreview(savedUrl);
+    if (savedFilename) setUploadedFilename(savedFilename);
+  }, []);
 
   const handleUploadClick = () => fileInputRef.current?.click();
 
@@ -50,71 +57,96 @@ const ProfileModal: React.FC<Props> = ({ onClose, onSaveImage, currentImage }) =
     if (!imageSrc || !croppedAreaPixels) return;
 
     try {
+      const token = localStorage.getItem('authToken');
+      if (!token) return alert('Not authenticated');
+
       const croppedBase64 = await getCroppedImg(imageSrc, croppedAreaPixels);
       const blob = await (await fetch(croppedBase64)).blob();
       const file = new File([blob], 'avatar.jpg', { type: 'image/jpeg' });
 
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('profile_picture', file);
 
-      const response = await fetch(`${API_BASE}/upload-avatar/`, {
-        method: 'POST',
-        body: formData,
+      const method = uploadedFilename ? 'PUT' : 'POST';
+      const endpoint = uploadedFilename ? 'update/' : 'create/';
+      const url = `${API_BASE}/profile-photo/${endpoint}`;
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        body: formData
       });
 
-      const result = await response.json();
-      console.log("✅ Uploaded image result:", result);
-
-      if (!result.filename) {
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("❌ Upload failed:", errorText);
         alert("Upload failed");
         return;
       }
 
-      const imageUrl = `${API_BASE}/uploads/${result.filename}`;
-      setPreview(imageUrl);
+      const result = await response.json();
+
+      if (!result.url || !result.filename) {
+        alert('Upload failed');
+        return;
+      }
+
+      localStorage.setItem('profileImageUrl', result.url);
+      localStorage.setItem('profileFilename', result.filename);
+
+      setPreview(result.url);
       setUploadedFilename(result.filename);
-      onSaveImage(imageUrl);
+      onSaveImage(result.url);
       setCropping(false);
       setImageSrc(null);
     } catch (err) {
       console.error('Upload failed:', err);
+      alert('Upload failed');
     }
   };
 
   const handleRemove = async () => {
-    if (uploadedFilename) {
-      try {
-        await fetch(`${API_BASE}/delete-avatar/${uploadedFilename}`, {
-          method: 'DELETE',
-        });
-      } catch (err) {
-        console.error('Failed to delete image:', err);
-      }
-    }
+    const token = localStorage.getItem('authToken');
+    if (!token || !uploadedFilename) return;
 
-    setPreview(null);
-    setUploadedFilename(null);
-    onSaveImage('');
+    try {
+      await fetch(`${API_BASE}/profile-photo/delete/`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ filename: uploadedFilename })
+      });
+
+      localStorage.removeItem('profileImageUrl');
+      localStorage.removeItem('profileFilename');
+
+      setPreview(null);
+      setUploadedFilename(null);
+      onSaveImage('');
+    } catch (err) {
+      console.error('Delete failed:', err);
+    }
   };
 
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <div className="close-icon" onClick={onClose}>
-          <FaTimesCircle />
-        </div>
+        <div className="close-icon" onClick={onClose}><FaTimesCircle /></div>
 
         <div className="profile-image-container">
           <div className="profile-image-wrapper">
             {preview ? (
-              <img src={preview} className="profile-preview" />
+              <img src={preview} className="profile-preview" alt="Preview" />
             ) : (
               <div className="placeholder-circle">No Image</div>
             )}
-            <div className="camera-icon" onClick={handleUploadClick}>
-              <FaCamera />
-            </div>
+            <div className="camera-icon" onClick={handleUploadClick}><FaCamera /></div>
           </div>
+
           <input
             type="file"
             ref={fileInputRef}
@@ -126,12 +158,8 @@ const ProfileModal: React.FC<Props> = ({ onClose, onSaveImage, currentImage }) =
 
         {!cropping ? (
           <div className="modal-actions">
-            <button className="edit-btn" onClick={handleUploadClick}>
-              <FaCamera /> Upload Photo
-            </button>
-            <button className="remove-btn" onClick={handleRemove}>
-              <FaTrash /> Remove
-            </button>
+            <button className="edit-btn" onClick={handleUploadClick}><FaCamera /> Upload Photo</button>
+            {preview && <button className="remove-btn" onClick={handleRemove}><FaTrash /> Remove</button>}
           </div>
         ) : (
           <>

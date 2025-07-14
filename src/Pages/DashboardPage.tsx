@@ -23,16 +23,20 @@ const DashboardPage = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
-  const [avatar, setAvatar] = useState<string | null>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // ✅ Load avatar on initial render from localStorage
+  const [avatar, setAvatar] = useState<string | null>(() => {
+    return localStorage.getItem('profileImageUrl');
+  });
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname.replace('/dashboard', '').replace(/^\/?/, '');
   const currentTitle = sidebarItems.find(item => item.path === currentPath)?.name || 'Dashboard';
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
+    localStorage.clear();
     navigate('/signup');
   };
 
